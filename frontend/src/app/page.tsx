@@ -1,6 +1,4 @@
-import Actions from "@/components/Actions";
-import Canvas from "@/components/Canvas";
-import { CanvasProvider } from "@/providers/canvas.provider";
+import CanvasScreen from "@/ui/canvas-screen";
 
 export default function Home() {
   return (
@@ -9,10 +7,7 @@ export default function Home() {
         <h1>Collaborative Drawing Board</h1>
       </header>
       <main>
-        <CanvasProvider>
-          <Canvas />
-          <Actions />
-        </CanvasProvider>
+        <CanvasScreen />
       </main>
       <footer>
         <h1>Draw together in real-time</h1>

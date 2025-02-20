@@ -1,8 +1,9 @@
-import { DrawEvent, UserJoinEvent } from "@/types/events";
+import type { DrawEvent, UserJoinEvent } from "@/types/events";
 import { SocketEvents } from "@/enums/events";
 import type { Socket } from "socket.io-client";
 import { createStore as vanillaCreate } from "zustand/vanilla";
 import { io } from "socket.io-client";
+import { COLORS } from "@/components/color-picker";
 
 interface CanvasEvents {
   connect: () => void;
@@ -16,6 +17,7 @@ interface CanvasEvents {
   handleDrawEvent: (event: DrawEvent) => void;
   handleUserJoin: (event: UserJoinEvent) => void;
   handleUserLeave: (event: UserJoinEvent) => void;
+  setDrawingColor: (color: string) => void;
 }
 
 type CanvasState = {
@@ -30,6 +32,7 @@ type CanvasState = {
   history: DrawEvent[];
   isDrawing: boolean;
   lastPosition: { x: number; y: number };
+  drawingColor: string;
 };
 
 export type CanvasStore = CanvasState & CanvasEvents;
@@ -40,6 +43,7 @@ export const canvasStore = vanillaCreate<CanvasStore>((set, get) => ({
   history: [],
   isDrawing: false,
   lastPosition: { x: 0, y: 0 },
+  drawingColor: COLORS[0],
 
   connect: () => {
     const socket = io("http://localhost:3000");
@@ -62,7 +66,7 @@ export const canvasStore = vanillaCreate<CanvasStore>((set, get) => ({
     });
 
     socket.on(SocketEvents.CLEAR, () => {
-      console.log("cleared store!")
+      console.log("cleared store!");
       set({ history: [] });
     });
   },
@@ -133,5 +137,9 @@ export const canvasStore = vanillaCreate<CanvasStore>((set, get) => ({
     const newParticipants = { ...participants };
     delete newParticipants[event.userId];
     set({ participants: newParticipants });
+  },
+
+  setDrawingColor: (color: string) => {
+    set({ drawingColor: color });
   },
 }));

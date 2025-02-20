@@ -1,11 +1,11 @@
-import { useEffect } from "react";
-import { DrawEvent } from "@/types/events";
+import { useEffect, useRef } from "react";
+import type { DrawEvent } from "@/types/events";
 import { useCanvasStore } from "@/stores/canvas/hooks";
-import { useCanvasContext } from "@/providers/canvas.provider";
+import type { CanvasRef } from "@/components/canvas";
 
 export function useCanvas() {
   const canvasStore = useCanvasStore();
-  const { canvasRef } = useCanvasContext();
+  const canvasRef = useRef<CanvasRef>(null);
 
   useEffect(() => {
     canvasStore.connect();
@@ -18,15 +18,12 @@ export function useCanvas() {
   }, []);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const ctx = canvasRef.current?.getContext("2d");
 
-    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     if (canvasStore.history.length === 0) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      return;
+      return canvasRef.current?.clear();
     }
 
     const drawLine = (data: DrawEvent) => {
@@ -47,7 +44,7 @@ export function useCanvas() {
     if (!canvas) return;
 
     canvasStore.setIsDrawing(true);
-    const rect = canvas.getBoundingClientRect();
+    const rect = e.currentTarget.getBoundingClientRect();
     canvasStore.setLastPosition({
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
@@ -60,7 +57,7 @@ export function useCanvas() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const rect = canvas.getBoundingClientRect();
+    const rect = e.currentTarget.getBoundingClientRect();
     const currentPos = {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
@@ -71,7 +68,7 @@ export function useCanvas() {
       y1: canvasStore.lastPosition.y,
       x2: currentPos.x,
       y2: currentPos.y,
-      color: "#ffffff",
+      color: canvasStore.drawingColor,
       userId: canvasStore.socketClient?.id || "",
     };
 
@@ -84,9 +81,9 @@ export function useCanvas() {
   };
 
   return {
-    canvasRef,
     handleMouseDown,
     handleMouseMove,
     handleMouseUp,
+    canvasRef,
   };
 }

@@ -1,31 +1,33 @@
 "use client";
 import { useClearCanvas } from "@/stores/canvas/hooks";
-import { useCanvasContext } from "@/providers/canvas.provider";
+import type { CanvasRef } from "@/components/canvas";
+import { RefObject } from "react";
+import ColorPicker from "./color-picker";
 
-export default function Actions() {
-  const { canvasRef } = useCanvasContext();
+export default function Actions({
+  canvasRef,
+}: {
+  canvasRef: RefObject<CanvasRef | null>;
+}) {
   const clearCanvas = useClearCanvas();
 
   const handleClearCanvas = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+    canvas.clear();
     clearCanvas();
   };
 
   return (
-    <div className="flex gap-2 justify-center my-2">
+    <div className="flex gap-2 items-center justify-center my-2">
       <button
         onClick={handleClearCanvas}
         className="bg-red-500 text-foreground px-4 py-2 rounded-md"
       >
         Clear
       </button>
+      <ColorPicker />
     </div>
   );
 }
