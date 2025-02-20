@@ -24,6 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      {/* React Scan is only for development */}
       <head>
         <script
           crossOrigin="anonymous"

@@ -8,7 +8,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3002",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
@@ -53,6 +53,6 @@ io.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(3000, () => {
+httpServer.listen(3000, "0.0.0.0", () => {
   console.log("Server is running on port 3000");
 });

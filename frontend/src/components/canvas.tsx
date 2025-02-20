@@ -7,7 +7,7 @@ export interface CanvasRef extends HTMLCanvasElement {
   clear: () => void;
 }
 
-export const Canvas = forwardRef<CanvasRef, {}>((_, ref) => {
+export const Canvas = forwardRef<CanvasRef, unknown>((_, ref) => {
   const { handleMouseDown, handleMouseMove, handleMouseUp, canvasRef } =
     useCanvas();
 
@@ -27,7 +27,7 @@ export const Canvas = forwardRef<CanvasRef, {}>((_, ref) => {
       ref={canvasRef}
       width={800}
       height={600}
-      className="border border-foreground rounded-lg"
+      className="block border border-foreground rounded-lg"
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}

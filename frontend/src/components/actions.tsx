@@ -1,7 +1,7 @@
 "use client";
 import { useClearCanvas } from "@/stores/canvas/hooks";
 import type { CanvasRef } from "@/components/canvas";
-import { RefObject } from "react";
+import type { RefObject } from "react";
 import ColorPicker from "./color-picker";
 
 export default function Actions({
@@ -25,7 +25,7 @@ export default function Actions({
         onClick={handleClearCanvas}
         className="bg-red-500 text-foreground px-4 py-2 rounded-md"
       >
-        Clear
+        Clear All
       </button>
       <ColorPicker />
     </div>
